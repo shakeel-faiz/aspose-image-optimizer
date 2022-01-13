@@ -19,10 +19,10 @@ class AdminMenu
     {
         if ($this->should_add_menu()) {
             add_menu_page(
-                'Aspose Imaging Converter',
-                'Aspose Imaging Converter',
+                'Aspose Image Optimizer',
+                'Aspose Image Optimizer',
                 'edit_published_posts',
-                'aspose_imaging_converter',
+                'aspose_image_optimizer',
                 array($this, 'render_menu_page'),
                 'dashicons-admin-page',
                 30
@@ -204,7 +204,7 @@ class AdminMenu
             $current_page   = !empty($current_screen) ? $current_screen->base : $current_page;
         }
 
-        if (strpos($current_page, "aspose_imaging_converter") === false) {
+        if (strpos($current_page, "aspose_image_optimizer") === false) {
             return;
         }
 

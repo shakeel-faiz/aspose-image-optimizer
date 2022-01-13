@@ -39,7 +39,7 @@ class Activation7
         update_option("aspose-cloud-app-sid", $token["aspose-cloud-app-sid"]);
         update_option("aspose-cloud-activation-secret", null);
 
-        $location = admin_url("admin.php?page=aspose_imaging_converter");
+        $location = admin_url("admin.php?page=aspose_image_optimizer");
 
         if (wp_redirect($location)) {
             exit;
