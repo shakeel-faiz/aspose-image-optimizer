@@ -52,9 +52,9 @@ class AdminMenu
             }
         </style>
 
-        <h1>Aspose.Imaging Cloud Converter</h1>
+        <h1>Aspose Image Optimizer</h1>
         <p>Please choose your WordPress directory that contains the images.
-            Aspose.Imaging Cloud Converter will optimize the images inside the
+            Aspose Image Optimizer will optimize the images inside the
             directory and its sub-directories.</p>
 
         <button id="btnChooseDirectory">Choose Directory</button>
@@ -70,7 +70,7 @@ class AdminMenu
                         </div>
                     </div>
                     <div class="aspimgconv-box-body">
-                        <p class="aspimgconv-box-body-description">Please choose the folder which contains the images that you want to optimize. Aspose.Imaging Converter will automatically include the images from this folder as well as from all its subfolders.</p>
+                        <p class="aspimgconv-box-body-description">Please choose the folder which contains the images that you want to optimize. Aspose Image Optimizer will automatically include the images from this folder as well as from all its subfolders.</p>
                         <div id="aspimgconv_Tree"></div>
                     </div>
                     <div class="aspimgconv-box-footer">
