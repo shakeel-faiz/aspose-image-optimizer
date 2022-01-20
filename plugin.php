@@ -7,7 +7,7 @@
  * Requires at least:   5.3
  * Requires PHP:        7.2.5
  * Author:              aspose.cloud Marketplace
- * Author URI:          https://www.aspose.cloud/
+ * Author URI:          https://marketplace.aspose.cloud/
  * License:             GPLv2
  * License URI:         https://www.gnu.org/licenses/gpl-2.0.html
  */
