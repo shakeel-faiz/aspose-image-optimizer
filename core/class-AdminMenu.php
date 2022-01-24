@@ -176,19 +176,19 @@ class AdminMenu
                 <h1>Last Scan Results</h1>
                 <div class="lsr-row">
                     <div class="lsr-heading">Total Savings</div>
-                    <div class="lsr-result"><?php echo $stats["human"] ?></div>
+                    <div class="lsr-result"><?php echo esc_html($stats["human"]) ?></div>
                 </div>
                 <div class="lsr-row">
                     <div class="lsr-heading">Percent</div>
-                    <div class="lsr-result"><?php echo $stats["percent"] ?>%</div>
+                    <div class="lsr-result"><?php echo esc_html($stats["percent"]) ?>%</div>
                 </div>
                 <div class="lsr-row">
                     <div class="lsr-heading">Images Optimized</div>
-                    <div class="lsr-result"><?php echo $stats["optimised"] ?></div>
+                    <div class="lsr-result"><?php echo esc_html($stats["optimised"]) ?></div>
                 </div>
                 <div class="lsr-row">
                     <div class="lsr-heading">Errors</div>
-                    <div class="lsr-result"><?php echo $errors_count ?></div>
+                    <div class="lsr-result"><?php echo esc_html($errors_count) ?></div>
                 </div>
             </div>
         </div>
