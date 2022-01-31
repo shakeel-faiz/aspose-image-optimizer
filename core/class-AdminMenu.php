@@ -209,6 +209,10 @@ class AdminMenu
             return;
         }
 
+        if (strpos($current_page, "aspose_image_optimizer_") > 0) {
+            return;
+        }
+
         wp_register_script(
             'jqfancytreedeps',
             ASPIMGCONV_URL . 'assets/js/fancytree/lib/jquery.fancytree.ui-deps.js',

@@ -110,6 +110,9 @@ if (!class_exists('WP_AsposeImagingConverter')) {
 
             $this->dir = new \AsposeImagingConverter\Core\Dir();
             $this->dir->init();
+
+            $this->adminsubmenu = new AsposeImagingConverter\ConvToWebP\AdminSubMenu();
+            $this->adminsubmenu->init();
         }
 
         public function dir()
