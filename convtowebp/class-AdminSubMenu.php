@@ -33,7 +33,33 @@ class AdminSubMenu
     function render_submenu_page()
     {
 ?>
-    <h1>Hi Test it is submenu</hi>
+        <button id="btnChooseDirectory">Choose Directory</button>
+
+        <div id="ChooseDirModal" class="aspimgconv_Modal">
+            <div class="aspimgconv_ModalOverlay"></div>
+            <div class="aspimgconv_Content">
+                <div class="aspimgconv-box">
+                    <div class="aspimgconv-box-header">
+                        <h3 class="aspimgconv-box-title">Choose Directory</h3>
+                        <div class="aspimgconv-btn-div">
+                            <button class="aspimgconv-btn-close">&times;</button>
+                        </div>
+                    </div>
+                    <div class="aspimgconv-box-body">
+                        <p class="aspimgconv-box-body-description">Please choose the folder which contains the images that you want to optimize. <i>Aspose Image Optimizer</i> will automatically include the images from this folder as well as from all its subfolders.</p>
+                        <div id="aspimgconv_Tree"></div>
+                    </div>
+                    <div class="aspimgconv-box-footer">
+                        <button class="aspimgconv-box-footer-btn" disabled>
+                            <div class="aic-btn-text">Choose directory</div>
+                            <div class="aic-btn-loader" style="margin: 0 50px;display:none;">
+                                <div class="aic-progress-loader"></div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 <?php
     }
 
