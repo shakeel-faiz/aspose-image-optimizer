@@ -26,6 +26,33 @@ if (!defined('ASPIMGCONV_DIRPATH')) {
 require_once ASPIMGCONV_DIRPATH . 'core/class-installer.php';
 register_activation_hook(__FILE__, array('AsposeImagingConverter\\Core\\Installer', 'AsposeImagingConverter_activated'));
 
+register_activation_hook(ASPIMGCONV_PLUGIN_FILE, function () {
+    global $wpdb;
+
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE {$wpdb->base_prefix}AsposeImagingWebP_dir_images (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        path text NOT NULL,
+        path_hash CHAR(32),
+        resize varchar(55),
+        lossy varchar(55),
+        error varchar(55) DEFAULT NULL,
+        image_size int(10) unsigned,
+        orig_size int(10) unsigned,
+        file_time int(10) unsigned,
+        last_scan timestamp DEFAULT '0000-00-00 00:00:00',
+        meta text,
+        UNIQUE KEY id (id),
+        UNIQUE KEY path_hash (path_hash),
+        KEY image_size (image_size)
+    ) $charset_collate;";
+
+    // Include the upgrade library to initialize a table.
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+    dbDelta($sql);
+});
+
 add_action('plugins_loaded', array('WP_AsposeImagingConverter', 'get_instance'));
 
 if (!class_exists('WP_AsposeImagingConverter')) {
