@@ -21,6 +21,13 @@ class Dir
 
             add_action('wp_ajax_aiconvtowebp_get_directory_list', array($this, 'directory_list'));
             add_action('wp_ajax_aiconvtowebp_image_list', array($this, 'image_list'));
+
+            /**
+             * Scanner ajax actions.
+             */
+            add_action('wp_ajax_directory_aiconvtowebp_start', array($this, 'directory_aiconvtowebp_start'));
+            add_action('wp_ajax_directory_aiconvtowebp_check_step', array($this, 'directory_aiconvtowebp_check_step'));
+            add_action('wp_ajax_directory_aiconvtowebp_finish', array($this, 'directory_aiconvtowebp_finish'));
         }
     }
 
@@ -28,12 +35,12 @@ class Dir
     {
     }
 
-    public function directory_aiconv_start()
+    public function directory_aiconvtowebp_start()
     {
         wp_send_json_success();
     }
 
-    public function directory_aiconv_check_step()
+    public function directory_aiconvtowebp_check_step()
     {
         $urls = $this->get_scanned_images();
         $current_step = absint($_POST['step']); // Input var ok.
@@ -45,7 +52,7 @@ class Dir
         wp_send_json_success();
     }
 
-    public function directory_aiconv_finish()
+    public function directory_aiconvtowebp_finish()
     {
         wp_send_json_success();
     }
@@ -297,7 +304,7 @@ class Dir
         $query = $this->build_query($values, $images);
         $wpdb->query($query); // Db call ok; no-cache ok.
 
-        $updateImageSizeAndErrorsToNull = "UPDATE {$wpdb->prefix}AsposeImagingConverter_dir_images SET image_size=null, error=null where last_scan=(select max(last_scan) from {$wpdb->prefix}AsposeImagingConverter_dir_images)";
+        $updateImageSizeAndErrorsToNull = "UPDATE {$wpdb->prefix}asposeimagingwebp_dir_images SET image_size=null, error=null where last_scan=(select max(last_scan) from {$wpdb->prefix}asposeimagingwebp_dir_images)";
         $wpdb->query($updateImageSizeAndErrorsToNull); // Db call ok; no-cache ok.
     }
 
@@ -311,7 +318,7 @@ class Dir
         $values = implode(',', $values);
 
         // Replace with image path and respective parameters.
-        $query = "INSERT INTO {$wpdb->prefix}AsposeImagingConverter_dir_images (path, path_hash, orig_size, file_time, last_scan) VALUES $values ON DUPLICATE KEY UPDATE image_size = IF( file_time < VALUES(file_time), NULL, image_size ), file_time = IF( file_time < VALUES(file_time), VALUES(file_time), file_time ), last_scan = VALUES( last_scan )";
+        $query = "INSERT INTO {$wpdb->prefix}asposeimagingwebp_dir_images (path, path_hash, orig_size, file_time, last_scan) VALUES $values ON DUPLICATE KEY UPDATE image_size = IF( file_time < VALUES(file_time), NULL, image_size ), file_time = IF( file_time < VALUES(file_time), VALUES(file_time), file_time ), last_scan = VALUES( last_scan )";
         $query = $wpdb->prepare($query, $images); // Db call ok; no-cache ok.
 
         return $query;
@@ -321,7 +328,7 @@ class Dir
     {
         global $wpdb;
 
-        $results = $wpdb->get_results("SELECT id, path, orig_size FROM {$wpdb->prefix}AsposeImagingConverter_dir_images WHERE last_scan = (SELECT MAX(last_scan) FROM {$wpdb->prefix}AsposeImagingConverter_dir_images )  GROUP BY id ORDER BY id", ARRAY_A); // Db call ok; no-cache ok.
+        $results = $wpdb->get_results("SELECT id, path, orig_size FROM {$wpdb->prefix}asposeimagingwebp_dir_images WHERE last_scan = (SELECT MAX(last_scan) FROM {$wpdb->prefix}asposeimagingwebp_dir_images )  GROUP BY id ORDER BY id", ARRAY_A); // Db call ok; no-cache ok.
 
         // Return image ids.
         if (is_wp_error($results)) {
@@ -454,44 +461,13 @@ class Dir
         return $this->get_scanned_images();
     }
 
-    public function create_table()
-    {
-        global $wpdb;
-
-        $charset_collate = $wpdb->get_charset_collate();
-
-        $sql = "CREATE TABLE {$wpdb->base_prefix}AsposeImagingConverter_dir_images (
-			id mediumint(9) NOT NULL AUTO_INCREMENT,
-			path text NOT NULL,
-			path_hash CHAR(32),
-			resize varchar(55),
-			lossy varchar(55),
-			error varchar(55) DEFAULT NULL,
-			image_size int(10) unsigned,
-			orig_size int(10) unsigned,
-			file_time int(10) unsigned,
-			last_scan timestamp DEFAULT '0000-00-00 00:00:00',
-			meta text,
-			UNIQUE KEY id (id),
-			UNIQUE KEY path_hash (path_hash),
-			KEY image_size (image_size)
-		) $charset_collate;";
-
-        // Include the upgrade library to initialize a table.
-        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-        dbDelta($sql);
-
-        // Set flag.
-        self::$table_exist = true;
-    }
-
     public function last_scan_results()
     {
         global $wpdb;
         $optimised = 0;
 
         $results = $wpdb->get_results(
-            "select path, image_size, orig_size from {$wpdb->prefix}AsposeImagingConverter_dir_images where last_scan = (SELECT max(last_scan) FROM {$wpdb->prefix}AsposeImagingConverter_dir_images ) and image_size is not null ORDER BY id;",
+            "select path, image_size, orig_size from {$wpdb->prefix}asposeimagingwebp_dir_images where last_scan = (SELECT max(last_scan) FROM {$wpdb->prefix}asposeimagingwebp_dir_images ) and image_size is not null ORDER BY id;",
             ARRAY_A
         ); // Db call ok; no-cache ok.
 
@@ -549,7 +525,7 @@ class Dir
         global $wpdb;
 
         $results = $wpdb->get_results(
-            "select path from {$wpdb->prefix}AsposeImagingConverter_dir_images where last_scan = (SELECT max(last_scan) FROM {$wpdb->prefix}AsposeImagingConverter_dir_images ) and error is not null ORDER BY id;",
+            "select path from {$wpdb->prefix}asposeimagingwebp_dir_images where last_scan = (SELECT max(last_scan) FROM {$wpdb->prefix}asposeimagingwebp_dir_images ) and error is not null ORDER BY id;",
             ARRAY_A
         ); // Db call ok; no-cache ok.
 

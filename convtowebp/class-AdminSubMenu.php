@@ -33,6 +33,26 @@ class AdminSubMenu
     function render_submenu_page()
     {
 ?>
+        <style>
+            #btnChooseDirectory {
+                box-sizing: border-box;
+                cursor: pointer;
+                display: inline-block;
+                border-width: 2px;
+                border-style: solid;
+                border-color: transparent;
+                border-radius: 4px;
+                text-decoration: none;
+                text-align: center;
+                min-width: 80px;
+                padding: 5px 14px;
+                text-transform: uppercase;
+                background-color: #17A8E3;
+                color: #fff;
+            }
+        </style>
+
+
         <button id="btnChooseDirectory">Choose Directory</button>
 
         <div id="ChooseDirModal" class="aspimgconv_Modal">
@@ -56,6 +76,44 @@ class AdminSubMenu
                                 <div class="aic-progress-loader"></div>
                             </div>
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="ProgressModal" class="aspimgconv_Modal">
+            <div class="aspimgconv_ModalOverlay"></div>
+            <div class="aspimgconv_Content">
+                <div class="aspimgconv-box">
+                    <div class="aspimgconv-box-header">
+                        <h3 class="aspimgconv-box-title">Optimizing your images ...</h3>
+                        <div class="aspimgconv-btn-div">
+                            <button class="aspimgconv-btn-close">&times;</button>
+                        </div>
+                    </div>
+                    <div class="aspimgconv-box-body">
+                        <p class="aspimgconv-box-body-description">Images are being compressed and optimized, please do not close this dialog.</p>
+                        <div id="aspimgconv_Progress">
+                            <div class="aic-progress-block">
+                                <div class="aic-progress">
+                                    <div style="margin: 0 10px;">
+                                        <div class="aic-progress-loader"></div>
+                                    </div>
+                                    <div class="aic-progress-text">
+                                        <span>0%</span>
+                                    </div>
+                                    <div class="aic-progress-bar">
+                                        <span style="width:0"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align:center">
+                                <div id="ProgressStateText">Optimizing images
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="aspimgconv-box-footer">
+                        <button class="aspimgconv-box-footer-btn">Cancel</button>
                     </div>
                 </div>
             </div>
