@@ -31,8 +31,25 @@ class Dir
         }
     }
 
+    function replace_extension($filename, $new_extension) {
+        return preg_replace('/\..+$/', '.' . $new_extension, $filename);
+    }
+
     private function optimise_image($id, $path)
     {
+        $contentDir = WP_CONTENT_DIR;
+        $contentDir = str_replace('\\', '/', $contentDir);
+
+        $outputPath = str_replace($contentDir, $contentDir."/OutputWebP", $path);
+
+        $outputDirPath = dirname($outputPath);
+
+        if (!file_exists($outputDirPath)) {
+            mkdir($outputDirPath, 0777, true);
+        }
+
+        $outputPath = $this->replace_extension($outputPath, "webp");
+
     }
 
     public function directory_aiconvtowebp_start()
