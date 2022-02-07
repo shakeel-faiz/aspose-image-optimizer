@@ -243,6 +243,18 @@ class Dir
         return false;
     }
 
+    function is_file_inside_outputWebP_dir($file_path)
+    {
+        $outputWebP_dir = WP_CONTENT_DIR . "/OutputWebP";
+        $outputWebP_dir = str_replace('\\', '/', $outputWebP_dir);
+
+        if (0 === strpos($file_path, $outputWebP_dir)) {
+            return true;
+        }
+
+        return false;
+    }
+
     private function is_image_from_extension($path)
     {
         $supported_image = array('gif', 'jpg', 'jpeg', 'png');
@@ -393,12 +405,7 @@ class Dir
                 continue;
             }
 
-            /**
-             * Path is an image.
-             *
-             * @TODO: The is_dir() check fails directories with spaces.
-             */
-            if (!is_dir($path) && !$this->is_media_library_file($path) && !strpos($path, '.bak')) {
+            if (!is_dir($path)) {
 
                 if (!$this->is_image($path)) {
                     continue;
@@ -456,7 +463,7 @@ class Dir
                 $file_path = $file->getPathname();
                 $file_path = str_replace('\\', '/', $file_path);
 
-                if ($this->is_image($file_path) && !$this->is_media_library_file($file_path) && strpos($file, '.bak') === false) {
+                if ($this->is_image($file_path) && !$this->is_file_inside_outputWebP_dir($file_path)) {
                     /** To be stored in DB, Part of code inspired from Ewwww Optimiser  */
                     $images[] = $file_path;
                     $images[] = md5($file_path);
