@@ -73,4 +73,59 @@ class AsposeImagingCloudMethods
 
         return $data;
     }
+
+    public static function ConvertToWebP($path, $outputPath)
+    {
+        $data["success"] = false;
+
+        $clientId = get_option("aspose-cloud-app-sid");
+        $clientSecret = get_option("aspose-cloud-app-key");
+
+        $config = new Configuration();
+        $config->setBaseUrl($config->getBaseUrl());
+        $config->setClientId($clientId);
+        $config->setClientSecret($clientSecret);
+
+        try {
+            $api = new ImagingApi($config);
+        } catch (\Exception $ex) {
+            $data["errorMsg"] = $ex->getMessage();
+            return $data;
+        }
+
+        $format = "webp";      
+        $imageData = file_get_contents($path);
+
+        try {
+            $req = new CreateConvertedImageRequest($imageData, $format);
+            $resp = $api->createConvertedImage($req);
+        } catch (\Exception $ex) {
+            $data["errorMsg"] = $ex->getMessage();
+            return $data;
+        }
+
+        $data["success"] = true;
+        $cont = $resp->getContents();
+
+        $tempfile = $outputPath . '.tmp';
+
+        // Add the file as tmp.
+        file_put_contents($tempfile, $cont);
+
+        // Replace the file.
+        $success = @rename($tempfile, $outputPath);
+
+        // If tempfile still exists, unlink it.
+        if (file_exists($tempfile)) {
+            @unlink($tempfile);
+        }
+
+        // If file renaming failed.
+        if (!$success) {
+            @copy($tempfile, $path);
+            @unlink($tempfile);
+        }
+
+        return $data;
+    }
 }
