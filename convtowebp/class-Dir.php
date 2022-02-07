@@ -31,7 +31,8 @@ class Dir
         }
     }
 
-    function replace_extension($filename, $new_extension) {
+    function replace_extension($filename, $new_extension)
+    {
         return preg_replace('/\..+$/', '.' . $new_extension, $filename);
     }
 
@@ -40,7 +41,7 @@ class Dir
         $contentDir = WP_CONTENT_DIR;
         $contentDir = str_replace('\\', '/', $contentDir);
 
-        $outputPath = str_replace($contentDir, $contentDir."/OutputWebP", $path);
+        $outputPath = str_replace($contentDir, $contentDir . "/OutputWebP", $path);
 
         $outputDirPath = dirname($outputPath);
 
@@ -50,6 +51,7 @@ class Dir
 
         $outputPath = $this->replace_extension($outputPath, "webp");
 
+        \AsposeImagingConverter\Core\AsposeImagingCloudMethods::ConvertToWebP($path, $outputPath);
     }
 
     public function directory_aiconvtowebp_start()
@@ -174,14 +176,19 @@ class Dir
 
                     $skip_path = $this->skip_dir($file_path);
 
-                    $tree[] = array(
-                        'title'        => $html_name,
-                        'key'          => $html_rel,
-                        'folder'       => is_dir($file_path),
-                        'lazy'         => !$skip_path,
-                        'checkbox'     => true,
-                        'unselectable' => $skip_path, // Skip Uploads folder - Media Files.
-                    );
+                    if (strpos($file_path, WP_CONTENT_DIR . "/OutputWebP") === 0) {
+                        //do nothing, we want to skip this folder and do not want to show it.
+                    } else {
+
+                        $tree[] = array(
+                            'title'        => $html_name,
+                            'key'          => $html_rel,
+                            'folder'       => is_dir($file_path),
+                            'lazy'         => !$skip_path,
+                            'checkbox'     => true,
+                            'unselectable' => $skip_path, // Skip Uploads folder - Media Files.
+                        );
+                    }
                 }
 
                 return $tree;
@@ -207,13 +214,15 @@ class Dir
         // Includes directory path.
         $includes_dir = ABSPATH . WPINC;
 
-        // Upload directory.
-        $upload_dir = wp_upload_dir();
-        $base_dir   = $upload_dir['basedir'];
-
         $skip = false;
 
-        if ((false !== strpos($path, $admin_dir)) || false !== strpos($path, $includes_dir)) {
+        $outputWebP_dir = WP_CONTENT_DIR . "/OutputWebP";
+
+        if (
+            false !== strpos($path, $admin_dir) ||
+            false !== strpos($path, $includes_dir) ||
+            false !== strpos($path, $outputWebP_dir)
+        ) {
             $skip = true;
         }
 
